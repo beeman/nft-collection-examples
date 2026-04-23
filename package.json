@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "bun run generate",
     "generate": "bun run collections/generate.ts",
     "serve": "serve -l 8080 output",
     "test": "echo \"Error: no test specified\" && exit 1"

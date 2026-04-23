@@ -21,7 +21,12 @@ async function getCollectionContext(collectionAssetsPath: string) {
   }
 }
 
-const baseUrl = process.env.BASE_URL ?? `http://localhost:8080`
+const [repositoryOwner, repositoryName] = process.env.GITHUB_REPOSITORY?.split('/') ?? []
+const baseUrl =
+  process.env.BASE_URL ??
+  (process.env.GITHUB_ACTIONS === 'true' && repositoryName && repositoryOwner
+    ? `https://${repositoryOwner}.github.io/${repositoryName}`
+    : `http://localhost:8080`)
 const outputDir = `${process.cwd()}/output/`
 
 async function main() {
@@ -89,7 +94,6 @@ async function main() {
     await writeFile(
       `${outputDir}${collectionId}/index.html`,
       createCollectionPage({
-        id: collectionId,
         title: collectionJson.name,
         description: collectionJson.description,
         assets: assetFiles,
@@ -140,7 +144,6 @@ function createHtmlPage({
                 description: item.description,
                 title: item.name,
                 path: item.id,
-                id: '',
               }),
             )
             .join('')}
@@ -152,12 +155,10 @@ function createHtmlPage({
 
 function createCollectionPage({
   description,
-  id,
   assets,
   title,
 }: {
   description: string
-  id: string
   assets: string[]
   title: string
 }) {
@@ -172,7 +173,7 @@ function createCollectionPage({
       </head>
       <body>
         <div style="display: flex; flex-direction: column; gap: 24px">
-          ${createCollectionCard({ description, id, title, path: '.' })}
+          ${createCollectionCard({ description, title, path: '.' })}
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
             ${assets.map((json) => createAssetCard({ json, path: '.' })).join('')}
           </div>
@@ -184,21 +185,21 @@ function createCollectionPage({
 
 export function createCollectionCard({
   description,
-  id,
   title,
   path = '.',
 }: {
   description: string
-  id: string
   title: string
   path: string
 }) {
+  const collectionHref = path === '.' ? './' : `${path}/`
+
   return `
     <div style="display: flex; flex-direction: column; gap: 24px">        
       <div style="display: flex; align-items: center; gap: 24px;">
         <img src="${path}/assets/collection.png" alt="collection.png" style="max-height: 256px;">
         <div>
-          <h1><a href="/${path}${id ? `/${id}` : ''}/">${title}</a></h1>      
+          <h1><a href="${collectionHref}">${title}</a></h1>
           <p>${description}</p>
           <span>
             <a href="${path}/assets/collection.json">collection.json</a>
