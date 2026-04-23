@@ -101,8 +101,8 @@ async function main() {
   await writeFile(
     `${outputDir}/index.html`,
     createHtmlPage({
-      title: 'Samui Collection Examples',
-      description: 'This is a collection of Samui Collection Examples.',
+      title: 'NFT Collection Examples',
+      description: 'This is a collection of NFT Collection Examples.',
       collections: collectionDetails,
     }),
   )

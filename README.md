@@ -1,4 +1,4 @@
-# samui-collection-examples
+# nft-collection-examples
 
 A collection of example NFT collections.
 

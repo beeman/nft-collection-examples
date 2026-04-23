@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "samui-collection-examples",
+      "name": "nft-collection-examples",
       "devDependencies": {
         "@types/node": "^24.1.0",
         "prettier": "^3.8.3",
